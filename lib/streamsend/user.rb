@@ -35,7 +35,6 @@ module StreamSend
 
     def self.create(user_hash)
       response = StreamSend.post("/accounts/#{user_hash['account_id']}/users.xml", :body => {:user => user_hash})
-
       case response.code
       when 201
         response.headers["location"] =~ /\/accounts\/\d+\/users\/(\d+)/

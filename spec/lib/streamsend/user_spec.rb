@@ -130,7 +130,7 @@ module StreamSend
       describe "with valid user parameters" do
         describe "with an existing users" do
           before(:each) do
-            stub_http_request(:post, /account\/1\/users.xml/).with(:person => {"email_address" => "foo@bar.com", "first_name" => "JoeBob"}).to_return(:body => "", :headers => {"location" => "http://test.host/accounts/2/users/1"}, :status => 201)
+            stub_http_request(:post, /accounts\/1\/users.xml/).with(:person => {"email_address" => "foo@bar.com", "first_name" => "JoeBob"}).to_return(:body => "", :headers => {"location" => "http://test.host/accounts/2/users/1"}, :status => 201)
           end
 
           it "should return the new user's id" do
