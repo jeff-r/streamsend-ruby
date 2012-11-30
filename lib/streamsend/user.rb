@@ -34,7 +34,7 @@ module StreamSend
     end
 
     def self.create(user_hash)
-      response = StreamSend.post("/account/#{user_hash['account_id']}/users.xml", :query => user_hash)
+      response = StreamSend.post("/accounts/#{user_hash['account_id']}/users.xml", :body => {:user => user_hash})
 
       case response.code
       when 201
