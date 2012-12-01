@@ -1,18 +1,20 @@
 require 'rubygems'
 require 'httparty'
 
-require "streamsend/resource"
-require "streamsend/subscriber"
-require "streamsend/list"
-require "streamsend/user"
-require "streamsend/account"
+require "streamsend/api/resource"
+require "streamsend/api/subscriber"
+require "streamsend/api/list"
+require "streamsend/api/user"
+require "streamsend/api/account"
 
 module StreamSend
-  include HTTParty
-  format :xml
+  module Api
+    include HTTParty
+    format :xml
 
-  def self.configure(username, password, host = "app.streamsend.com")
-    base_uri host
-    basic_auth username, password
+    def self.configure(username, password, host = "app.streamsend.com")
+      base_uri host
+      basic_auth username, password
+    end
   end
 end
