@@ -1,6 +1,5 @@
 require File.join(Dir.pwd, "lib/streamsend")
 require "integration/spec_helper.rb"
-require "ruby-debug"
 
 describe "user via api" do
   before do
@@ -45,5 +44,4 @@ describe "user via api" do
       return user if user.email_address == email_address
     end
   end
-
 end

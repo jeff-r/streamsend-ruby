@@ -5,6 +5,7 @@ require "streamsend/resource"
 require "streamsend/subscriber"
 require "streamsend/list"
 require "streamsend/user"
+require "streamsend/account"
 
 module StreamSend
   include HTTParty
