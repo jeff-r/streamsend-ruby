@@ -4,7 +4,8 @@ module StreamSend
   module Api
     describe "List" do
       let(:app_host) { "http://test.host" }
-      before(:each) do
+      before do
+        WebMock.enable!
         stub_http_request(:any, //).to_return(:body => "Page not found.", :status => 404)
 
         @username = "scott"
@@ -24,8 +25,12 @@ module StreamSend
         StreamSend::Api.configure(@username, @password, @host)
       end
 
+      after do
+        WebMock.disable!
+      end
+
       describe ".audience_id" do
-        it "should return the id of the first audience" do
+        it "returns the id of the first audience" do
           StreamSend::Api::List.audience_id.should == 2
         end
       end

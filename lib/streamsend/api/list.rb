@@ -8,7 +8,7 @@ module StreamSend
         when 200
           response["lists"].collect { |data| new(data) }
         else
-          raise "Could not find any lists. (#{response.code})"
+          raise StreamSend::Api::Exception.new("Could not find any lists. (#{response.code})")
         end
       end
 
@@ -19,7 +19,7 @@ module StreamSend
         when 200
           new(response["list"])
         else
-          raise "Could not find any lists. (#{response.code})"
+          raise StreamSend::Api::Exception.new("Could not find any lists. (#{response.code})")
         end
       end
 
@@ -30,7 +30,7 @@ module StreamSend
           response.headers["location"] =~ /audiences\/\d\/lists\/(\d+)$/
           new_list_id = $1.to_i
         else
-          raise "Could not create a list. (#{response.body})"
+          raise StreamSend::Api::Exception.new("Could not create a list. (#{response.body})")
         end
       end
     end

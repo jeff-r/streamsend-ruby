@@ -3,6 +3,7 @@ require "integration/spec_helper.rb"
 
 describe "user via api" do
   before do
+    WebMock.disable!
     account = StreamSend::Api::IntegrationConfiguration.root_account
     StreamSend::Api.configure(account.api_username, account.api_password, account.app_host)
   end
@@ -25,7 +26,7 @@ describe "user via api" do
     )
 
     saved_user = find_by_email_address("joe@gmail.com")
-    saved_user.id.should > 1
+    saved_user.first.id.should > 0
   end
 
   it "can be found" do

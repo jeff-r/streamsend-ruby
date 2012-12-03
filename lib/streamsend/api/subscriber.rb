@@ -8,7 +8,7 @@ module StreamSend
         when 200
           response["people"].collect { |data| new(data) }
         else
-          raise "Could not find any subscribers. Make sure your audience ID is correct. (#{response.code})"
+          raise StreamSend::Api::Exception.new("Could not find any subscribers. Make sure your audience ID is correct. (#{response.code})")
         end
       end
 
@@ -23,7 +23,7 @@ module StreamSend
             nil
           end
         else
-          raise "Could not find the subscriber. Make sure your audience ID is correct. (#{response.code})"
+          raise StreamSend::Api::Exception.new("Could not find the subscriber. Make sure your audience ID is correct. (#{response.code})")
         end
       end
 
@@ -38,7 +38,7 @@ module StreamSend
             subscriber_id.to_i
           end
         else
-          raise "Could not create the subscriber. (#{response.code})"
+          raise StreamSend::Api::Exception.new("Could not create the subscriber. (#{response.code})")
         end
       end
 
@@ -53,7 +53,7 @@ module StreamSend
             nil
           end
         else
-          raise "Could not show the subscriber. (#{response.code})"
+          raise StreamSend::Api::Exception.new("Could not show the subscriber. (#{response.code})")
         end
       end
 
@@ -64,7 +64,7 @@ module StreamSend
         when 200
           true
         else
-          raise "Could not activate the subscriber. (#{response.code})"
+          raise StreamSend::Api::Exception.new("Could not activate the subscriber. (#{response.code})")
         end
       end
 
@@ -75,7 +75,7 @@ module StreamSend
         when 200
           true
         else
-          raise "Could not subscribe the subscriber. (#{response.code})"
+          raise StreamSend::Api::Exception("Could not subscribe the subscriber. (#{response.code})")
         end
       end
     end

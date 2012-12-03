@@ -3,7 +3,8 @@ require File.join(File.dirname(__FILE__), "../../../spec_helper")
 module StreamSend
   module Api
     describe "Subscriber" do
-      before(:each) do
+      before do
+        WebMock.enable!
         stub_http_request(:any, //).to_return(:body => "Page not found.", :status => 404)
 
         @username = "scott"
@@ -21,6 +22,10 @@ module StreamSend
         stub_http_request(:get, "http://#{@username}:#{@password}@#{@host}/audiences.xml").to_return(:body => xml)
 
         StreamSend::Api.configure(@username, @password, @host)
+      end
+
+      after do
+        WebMock.disable!
       end
 
       describe ".audience_id" do

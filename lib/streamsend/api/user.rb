@@ -10,7 +10,7 @@ module StreamSend
         when 200
           response["users"].collect { |data| new(data) }
         else
-          raise "Could not find any users. Make sure your account ID is correct. (#{response.code})"
+          raise StreamSend::Api::Exception.new("Could not find any users. Make sure your account ID is correct. (#{response.code})")
         end
       end
 
@@ -20,7 +20,7 @@ module StreamSend
         when 200
           new(response["user"])
         else
-          raise "Could not find the user. Make sure your account ID and user ID are correct. (#{response.code})"
+          raise StreamSend::Api::Exception.new("Could not find the user. Make sure your account ID and user ID are correct. (#{response.code})")
         end
       end
 
@@ -42,7 +42,7 @@ module StreamSend
           user_id = $1
           user_id.to_i
         else
-          raise "Could not create the user. (#{response.code})"
+          raise StreamSend::Api::Exception.new("Could not create the user. (#{response.code})")
         end
       end
     end

@@ -5,11 +5,17 @@ module StreamSend
   module Api
     describe "User" do
       let(:app_host) { "http://test.host" }
+
       before do
+        WebMock.enable!
         @username = "jeff"
         @password = "topsecret"
         @host = "test.host"
         StreamSend::Api.configure(@username, @password, @host)
+      end
+
+      after do
+        WebMock.disable!
       end
 
       describe "#all" do

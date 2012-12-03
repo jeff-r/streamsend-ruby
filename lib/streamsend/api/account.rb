@@ -1,4 +1,5 @@
 require "active_support/core_ext/hash"
+require "lib/streamsend/api/exception"
 
 module StreamSend
   module Api
@@ -10,7 +11,7 @@ module StreamSend
         when 200
           response["accounts"].collect { |data| new(data) }
         else
-          raise "Could not find any accouns. Make sure your api username and password are correct. (#{response.code})"
+          raise StreamSend::Api::Exception.new("Could not find any accounts. Make sure your api username and password are correct. (#{response.code})")
         end
       end
 
@@ -20,7 +21,7 @@ module StreamSend
         when 200
           new(response["account"])
         else
-          raise "Could not find the account. Make sure your account ID is correct. (#{response.code})"
+          raise StreamSend::Api::Exception.new("Could not find the account. Make sure your account ID is correct. (#{response.code})")
         end
       end
 
@@ -42,7 +43,18 @@ module StreamSend
           account_id = $1
           account_id.to_i
         else
-          raise "Could not create the account. (#{response.code})"
+          raise StreamSend::Api::Exception.new("Could not create the account. (#{response.code})")
+        end
+      end
+
+      def self.destroy(id)
+        id = id.to_i
+        response = StreamSend::Api.delete("/accounts/#{id}.xml")
+        case response.code
+        when 200
+          true
+        else
+          raise StreamSend::Api::Exception.new("Could not delete the account. (#{response.code})")
         end
       end
     end
