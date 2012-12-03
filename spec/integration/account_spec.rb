@@ -43,7 +43,8 @@ describe "user via api" do
 
   describe ".create" do
     it "creates a new account" do
-      create_account
+      id = create_account
+      StreamSend::Api::Account.destroy(id)
     end
   end
 
