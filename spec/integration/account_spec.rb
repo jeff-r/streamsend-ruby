@@ -1,6 +1,6 @@
 require File.join(Dir.pwd, "lib/streamsend")
 require "integration/spec_helper"
-require "lib/streamsend/api/exception"
+require File.expand_path(__FILE__, "../../exception")
 
 describe "user via api" do
   before do

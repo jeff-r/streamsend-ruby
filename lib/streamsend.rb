@@ -6,6 +6,7 @@ require "streamsend/api/subscriber"
 require "streamsend/api/list"
 require "streamsend/api/user"
 require "streamsend/api/account"
+require "streamsend/api/exception"
 
 module StreamSend
   module Api

@@ -1,4 +1,5 @@
 require "active_support/core_ext/hash"
+require File.expand_path(__FILE__, "exception")
 
 module StreamSend
   module Api

@@ -1,3 +1,5 @@
+require File.expand_path(__FILE__, "exception")
+
 module StreamSend
   module Api
     class Subscriber < Resource
