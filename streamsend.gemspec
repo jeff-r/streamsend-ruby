@@ -9,8 +9,11 @@ Gem::Specification.new do |gem|
   gem.date          = %q{2012-04-02}
 
   gem.add_dependency "httparty", "0.7.4"
-  gem.add_development_dependency "rspec", "~> 2.9"
+  gem.add_dependency "activesupport", "~>3.2"
+  gem.add_dependency "builder"
+  gem.add_development_dependency "rspec"
   gem.add_development_dependency "webmock", "~> 1.6"
+  gem.add_development_dependency "debugger"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
