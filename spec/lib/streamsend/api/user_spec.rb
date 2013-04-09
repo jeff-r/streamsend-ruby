@@ -115,24 +115,6 @@ module StreamSend
         end
       end
 
-      describe ".update" do
-        before do
-          @user_hash = {
-            "first-name" => "Jerry",
-            "account_id" => 1,
-            "user_id" => 2
-          }
-          stub_http_request(:put, "http://#{@username}:#{@password}@#{@host}/accounts/1/users/2.xml").with(:body => @user_hash.to_xml).to_return(:body => nil, :status => 200)
-        end
-
-        describe "with a valid user" do
-          it "should be successful" do
-            response = StreamSend::Api::User.update(@user_hash)
-            response.should be_true
-          end
-        end
-      end
-
       describe ".create" do
         describe "with valid user parameters" do
           describe "with an existing users" do
