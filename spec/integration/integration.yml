@@ -1,0 +1,5 @@
+root_account:
+  api_username: "rootapiuser"
+  api_password: "rootapipassword"
+  app_host: "localhost:3000"
+  account_id: 1
