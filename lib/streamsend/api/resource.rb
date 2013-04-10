@@ -20,7 +20,14 @@ module StreamSend
       end
 
       def self.audience_id
-        @audience_id ||= StreamSend::Api.get("/audiences.xml").parsed_response["audiences"].first["id"]
+        if @audience_id.nil?
+          audiences_repsonse = StreamSend::Api.get("/audiences.xml")
+          audiences_entity = audiences_repsonse.parsed_response
+          audiences = audiences_entity["audiences"]
+          audience = audiences.first
+          @audience_id = audience["id"]
+        end
+        @audience_id
       end
     end
   end
