@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Scott Albertson"]
+  gem.authors       = ["Scott Albertson", "Jeff Roush", "Mark Eschbach"]
   gem.email         = %q{salbertson@streamsend.com}
   gem.summary       = %q{Ruby wrapper for the StreamSend API.}
   gem.description   = %q{Ruby wrapper for the StreamSend API.}
@@ -20,5 +20,5 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "streamsend"
   gem.require_paths = ["lib"]
-  gem.version       = "0.1.3"
+  gem.version       = "0.1.4"
 end
