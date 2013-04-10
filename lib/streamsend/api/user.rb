@@ -26,7 +26,12 @@ module StreamSend
       end
 
       def self.update(user_hash)
-        response = StreamSend::Api.put("/accounts/#{user_hash['account_id']}/users/#{user_hash['user_id']}.xml", :body => user_hash.to_xml)
+        user_properties = user_hash.clone
+        user_properties.delete 'user_id'
+        user_properties.delete 'account_id'
+
+        xml_hash = user_properties.to_xml :root => "user"
+        response = StreamSend::Api.put("/accounts/#{user_hash['account_id']}/users/#{user_hash['user_id']}.xml", :body => xml_hash, :headers => {'Content-Type' => 'application/xml', 'Accept' => 'application/xml'})
         case response.code
         when 200
           true
