@@ -35,6 +35,21 @@ module StreamSend
           raise StreamSend::Api::Exception.new("Could not create a list. (#{response.body})")
         end
       end
+
+      def destroy
+        self.class.destroy( id )
+      end
+
+      def self.destroy( id )
+        id_as_integer = id.to_i
+        response = StreamSend::Api.delete("/audiences/#{audience_id}/lists/#{id_as_integer}.xml")
+        case response.code
+        when 200
+          true
+        else
+          raise StreamSend::Api::Exception.new "Could not delete list (#{response.code})."
+        end
+      end
     end
   end
 end

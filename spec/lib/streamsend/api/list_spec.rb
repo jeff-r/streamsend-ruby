@@ -21,6 +21,7 @@ module StreamSend
         </audiences>
         XML
         stub_http_request(:get, "http://#{@username}:#{@password}@#{@host}/audiences.xml").to_return(:body => xml)
+        StreamSend::Api::List.stub(:audience_id).and_return(2)
 
         StreamSend::Api.configure(@username, @password, @host)
       end
@@ -173,38 +174,6 @@ module StreamSend
           end
         end
       end
-
-
-      describe ".create" do
-        describe "with no existing list using the same name" do
-          before(:each) do
-            @new_list_name = "list 1"
-            new_list_params = { :list => {:name => @new_list_name} }
-            stub_http_request(:post, /audiences\/2\/lists.xml/).with(new_list_params).to_return(:status => 201, :headers => {:location => "#{app_host}/audiences/2/lists/42"} )
-          end
-
-          it "should return list" do
-            list_id = StreamSend::Api::List.create(@new_list_name)
-            list_id.should == 42
-          end
-        end
-
-        describe "with an existing list using the same name" do
-          before(:each) do
-            @new_list_name = "list 1"
-            new_list_params = { :list => {:name => @new_list_name} }
-            @error_message = "<error>Name has already been taken<error>"
-            stub_http_request(:post, /audiences\/2\/lists.xml/).with(new_list_params).to_return(:status => 422, :body => @error_message)
-          end
-
-          it "should raise an error" do
-            lambda {
-              StreamSend::Api::List.create(@new_list_name)
-            }.should raise_error
-          end
-        end
-      end
-
     end
   end
 end
