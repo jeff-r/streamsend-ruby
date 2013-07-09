@@ -1,4 +1,5 @@
 require File.join(File.dirname(__FILE__), "../../../spec_helper")
+require "ostruct"
 
 module StreamSend
   module Api
@@ -31,6 +32,18 @@ module StreamSend
       describe ".audience_id" do
         it "should return the id of the first audience" do
           StreamSend::Api::Subscriber.audience_id.should == 2
+        end
+      end
+
+      describe ".clear_audience" do
+        it "allows the audience_id to be retrieved again" do
+          @resource = StreamSend::Api::Resource.new({"name" => "jeff"})
+          StreamSend::Api.should_receive(:get).with("/audiences.xml").and_return(OpenStruct.new(:parsed_response => { "audiences" => [{"id" => 2}] }))
+          StreamSend::Api::Resource.audience_id.should == 2
+          StreamSend::Api.should_receive(:get).with("/audiences.xml").and_return(OpenStruct.new(:parsed_response => { "audiences" => [{"id" => 1}] }))
+          StreamSend::Api::Resource.audience_id.should == 2
+          StreamSend::Api::Resource.clear_audience
+          StreamSend::Api::Resource.audience_id.should == 1
         end
       end
 
@@ -117,21 +130,6 @@ module StreamSend
             subscriber.id.should == 2
             subscriber.email_address.should == "scott@gmail.com"
             subscriber.created_at.should == Time.parse("2009-09-18T01:27:05Z")
-          end
-        end
-
-        describe "with no matching subscriber" do
-          before(:each) do
-            xml = <<-XML
-            <?xml version="1.0" encoding="UTF-8"?>
-            <people type="array"\>
-            XML
-
-            stub_http_request(:get, "http://#{@username}:#{@password}@#{@host}/audiences/2/people.xml?email_address=bad.email@gmail.com").to_return(:body => xml)
-          end
-
-          it "should return nil" do
-            StreamSend::Api::Subscriber.find("bad.email@gmail.com").should == nil
           end
         end
 

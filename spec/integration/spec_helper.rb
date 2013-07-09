@@ -5,7 +5,7 @@ module StreamSend
   module Api
     class IntegrationConfiguration
       def self.config
-        @config ||= YAML.load_file("spec/integration/integration.yml")
+        @config ||= YAML.load(ERB.new(IO.read("spec/integration/integration.yml")).result)
       end
 
       def self.root_account

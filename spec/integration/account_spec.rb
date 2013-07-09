@@ -1,10 +1,11 @@
+require "spec_helper"
+
 require File.join(Dir.pwd, "lib/streamsend")
 require "integration/spec_helper"
 require File.expand_path(__FILE__, "../../exception")
 
 describe "user via api" do
   before do
-    WebMock.disable!
     @account = StreamSend::Api::IntegrationConfiguration.root_account
     StreamSend::Api.configure(@account.api_username, @account.api_password, @account.app_host)
   end
@@ -30,31 +31,39 @@ describe "user via api" do
 
   describe ".all" do
     it "lists all accounts" do
-      accounts = StreamSend::Api::Account.all
-      accounts.count.should > 0
+      VCR.use_cassette('streamsend') do
+        accounts = StreamSend::Api::Account.all
+        accounts.count.should > 0
+      end
     end
   end
 
   describe ".show" do
     it "finds the root account" do
-      root_account = StreamSend::Api::Account.show(1)
-      root_account.name.should == "EZ Publishing"
+      VCR.use_cassette('streamsend') do
+        root_account = StreamSend::Api::Account.show(1)
+        root_account.name.should == "EZ Publishing"
+      end
     end
   end
 
   describe ".create" do
     it "creates a new account" do
-      id = create_account
-      StreamSend::Api::Account.destroy(id)
+      VCR.use_cassette('streamsend') do
+        id = create_account
+        StreamSend::Api::Account.destroy(id)
+      end
     end
   end
 
   describe ".destroy" do
     it "deletes an account" do
-      id = create_account
-      response = StreamSend::Api::Account.destroy(id)
-      response.should == true
-      expect { StreamSend::Api::Account.show(id) }.to raise_exception(StreamSend::Api::Exception, /could not find/i)
+      VCR.use_cassette('streamsend') do
+        id = create_account
+        response = StreamSend::Api::Account.destroy(id)
+        response.should == true
+        expect { StreamSend::Api::Account.show(id) }.to raise_exception(StreamSend::Api::Exception, /could not find/i)
+      end
     end
   end
 end

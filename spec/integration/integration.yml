@@ -1,5 +1,5 @@
 root_account:
   api_username: "rootapiuser"
-  api_password: "rootapipassword"
+  api_password: <%= ENV['STREAMSEND_PASSWORD'] %>
   app_host: "localhost:3000"
   account_id: 1

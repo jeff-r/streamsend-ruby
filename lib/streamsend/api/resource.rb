@@ -19,6 +19,10 @@ module StreamSend
         @data["id"]
       end
 
+      def self.clear_audience
+        @audience_id = nil
+      end
+
       def self.audience_id
         if @audience_id.nil?
           audiences_repsonse = StreamSend::Api.get("/audiences.xml")
