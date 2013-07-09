@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    streamsend (0.1.4)
+    streamsend (0.2.0)
       activesupport (~> 3.2)
       builder
       httparty
@@ -14,15 +14,8 @@ GEM
       multi_json (~> 1.0)
     addressable (2.3.5)
     builder (3.2.2)
-    columnize (0.3.6)
     crack (0.4.0)
       safe_yaml (~> 0.9.0)
-    debugger (1.6.0)
-      columnize (>= 0.3.1)
-      debugger-linecache (~> 1.2.0)
-      debugger-ruby_core_source (~> 1.2.1)
-    debugger-linecache (1.2.0)
-    debugger-ruby_core_source (1.2.3)
     diff-lcs (1.2.4)
     httparty (0.11.0)
       multi_json (~> 1.0)
@@ -38,8 +31,10 @@ GEM
     rspec-expectations (2.13.0)
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.13.1)
+    ruby-fsevent (0.2.1)
     safe_yaml (0.9.3)
     vcr (2.5.0)
+    watchr (0.7)
     webmock (1.12.3)
       addressable (>= 2.2.7)
       crack (>= 0.3.2)
@@ -48,8 +43,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  debugger
   rspec
+  ruby-fsevent
   streamsend!
   vcr
+  watchr
   webmock (~> 1.6)

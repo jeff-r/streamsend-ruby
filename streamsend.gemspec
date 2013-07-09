@@ -14,6 +14,8 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "rspec"
   gem.add_development_dependency "webmock", "~> 1.6"
   gem.add_development_dependency "vcr"
+  gem.add_development_dependency "watchr"
+  gem.add_development_dependency "ruby-fsevent"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
