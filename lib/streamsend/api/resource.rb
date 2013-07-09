@@ -28,6 +28,9 @@ module StreamSend
           audiences_repsonse = StreamSend::Api.get("/audiences.xml")
           audiences_entity = audiences_repsonse.parsed_response
           audiences = audiences_entity["audiences"]
+          if audiences_entity["audiences"].nil?
+            raise StreamSend::Api::Exception.new("Invalid response when fetching audience. Are your credentials valid?")
+          end
           audience = audiences.first
           @audience_id = audience["id"]
         end

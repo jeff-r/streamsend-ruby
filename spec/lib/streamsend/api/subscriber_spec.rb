@@ -33,6 +33,15 @@ module StreamSend
         it "should return the id of the first audience" do
           StreamSend::Api::Subscriber.audience_id.should == 2
         end
+
+        it "should throw an error on failure" do
+          xml = <<-XML
+        <?xml version="1.0" encoding="UTF-8"?>
+        <foo></foo>
+          XML
+          stub_http_request(:get, "http://#{@username}:#{@password}@#{@host}/audiences.xml").to_return(:body => xml)
+          expect { StreamSend::Api::Subscriber.audience_id.should == 2 }.to raise_error(StreamSend::Api::Exception)
+        end
       end
 
       describe ".clear_audience" do
