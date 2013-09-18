@@ -80,6 +80,18 @@ module StreamSend
           raise StreamSend::Api::Exception("Could not subscribe the subscriber. (#{response.code})")
         end
       end
+
+      def destroy
+        response = StreamSend::Api.delete("/audiences/#{audience_id}/people/#{id}.xml")
+        case response.code
+        when 200
+          true
+        when 423
+          raise LockedError, "Can not delete"
+        else
+          raise UnexpectedResponse, response.code
+        end
+      end
     end
   end
 end

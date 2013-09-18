@@ -271,6 +271,32 @@ module StreamSend
           end
         end
       end
+
+      describe "#destory" do
+        let( :subscriber ){
+          StreamSend::Api::Subscriber.new({"id"=> 2, "audience_id" => 1})
+        }
+        let( :uri ){ "http://#{@username}:#{@password}@#{@host}/audiences/1/people/2.xml" }
+
+        it "returns true when destroyed" do
+          stub_http_request(:delete, uri ).to_return(:body => nil)
+          expect(subscriber.destroy).to be_true
+        end
+
+        it "throws a LockedError when locked" do
+          stub_http_request(:delete, uri ).to_return(:status => 423, :body => nil)
+          expect do
+            subscriber.destroy
+          end.to raise_error( LockedError )
+        end
+
+        it "throws unexpected response with any other exception" do
+          stub_http_request(:delete, uri ).to_return(:status => 500, :body => "Error text meant for HCI")
+          expect do
+            subscriber.destroy
+          end.to raise_error( UnexpectedResponse )
+        end
+      end
     end
   end
 end
