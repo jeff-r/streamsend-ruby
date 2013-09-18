@@ -88,7 +88,9 @@ module StreamSend
           end
 
           it "should raise an exception" do
-            lambda { StreamSend::Api::Subscriber.all }.should raise_error
+            expect do
+              StreamSend::Api::Subscriber.all
+            end.to raise_error(ApiException)
           end
         end
       end

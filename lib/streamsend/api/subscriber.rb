@@ -10,7 +10,7 @@ module StreamSend
         when 200
           response["people"].collect { |data| new(data) }
         else
-          raise StreamSend::Api::Exception.new("Could not find any subscribers. Make sure your audience ID is correct. (#{response.code})")
+          raise StreamSend::Api::ApiException.new("Could not find any subscribers. Make sure your audience ID is correct. (status => #{response.code}, audience_id => #{audience_id})")
         end
       end
 
