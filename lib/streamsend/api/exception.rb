@@ -3,7 +3,7 @@ module StreamSend
     class Exception < StandardError
     end
 
-    class ApiException < StandardError
+    class ApiException < Exception
     end
 
     class LockedError <  ApiException

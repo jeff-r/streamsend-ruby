@@ -17,14 +17,14 @@ module StreamSend
         subscribers
       end
 
-      def self.index(options)
+      def self.index(options = {})
         response = StreamSend::Api.get("/audiences/#{audience_id}/people.xml", :query => options)
 
         case response.code
         when 200
           response["people"].collect { |data| new(data) }
         else
-          raise StreamSend::Api::ApiException.new("Could not find any subscribers. Make sure your audience ID is correct. (status => #{response.code}, audience_id => #{audience_id})")
+          raise StreamSend::Api::ApiException.new("Error response (#{response.code}), Make sure your audience ID is correct. (audience_id => #{audience_id})")
         end
       end
 

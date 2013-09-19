@@ -34,7 +34,7 @@ module StreamSend
         end
       end
 
-      describe ".all" do
+      describe ".index" do
         describe "with subscribers" do
           before(:each) do
             xml = <<-XML
@@ -48,11 +48,11 @@ module StreamSend
             </people>
             XML
 
-            stub_http_request(:get, "http://#{@username}:#{@password}@#{@host}/audiences/2/people.xml").to_return(:body => xml)
+            stub_http_request(:get, "http://#{@username}:#{@password}@#{@host}/audiences/2/people.xml?").to_return(:body => xml)
           end
 
           it "should return array of one subscriber object" do
-            subscribers = StreamSend::Api::Subscriber.all
+            subscribers = StreamSend::Api::Subscriber.index
             subscribers.size.should == 1
 
             subscribers.first.should be_instance_of(StreamSend::Api::Subscriber)
@@ -69,11 +69,11 @@ module StreamSend
             <people type="array"/>
             XML
 
-            stub_http_request(:get, "http://#{@username}:#{@password}@#{@host}/audiences/2/people.xml").to_return(:body => xml)
+            stub_http_request(:get, "http://#{@username}:#{@password}@#{@host}/audiences/2/people.xml?").to_return(:body => xml)
           end
 
           it "should return an empty array" do
-            StreamSend::Api::Subscriber.all.should == []
+            StreamSend::Api::Subscriber.index.should == []
           end
         end
 
@@ -89,7 +89,7 @@ module StreamSend
 
           it "should raise an exception" do
             expect do
-              StreamSend::Api::Subscriber.all
+              StreamSend::Api::Subscriber.index
             end.to raise_error(ApiException)
           end
         end
