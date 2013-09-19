@@ -4,13 +4,27 @@ module StreamSend
   module Api
     class Subscriber < Resource
       def self.all
-        response = StreamSend::Api.get("/audiences/#{audience_id}/people.xml")
+        options = { :per_page => 1_000, :page => 0 }
+        last_gathered_count = 1
+        sbuscribers = []
+
+        until last_gathered_count == 0
+          gathered = self.index( options )
+          subscribers.concat( gathered )
+          options[:page] = options[:page]+1
+          last_gathered_count = gatehred.count
+        end
+        subscribers
+      end
+
+      def self.index(options = {})
+        response = StreamSend::Api.get("/audiences/#{audience_id}/people.xml", :query => options)
 
         case response.code
         when 200
           response["people"].collect { |data| new(data) }
         else
-          raise StreamSend::Api::Exception.new("Could not find any subscribers. Make sure your audience ID is correct. (#{response.code})")
+          raise StreamSend::Api::ApiException.new("Error response (#{response.code}), Make sure your audience ID is correct. (audience_id => #{audience_id})")
         end
       end
 
@@ -78,6 +92,18 @@ module StreamSend
           true
         else
           raise StreamSend::Api::Exception("Could not subscribe the subscriber. (#{response.code})")
+        end
+      end
+
+      def destroy
+        response = StreamSend::Api.delete("/audiences/#{audience_id}/people/#{id}.xml")
+        case response.code
+        when 200
+          true
+        when 423
+          raise LockedError, "Can not delete"
+        else
+          raise UnexpectedResponse, response.code
         end
       end
     end

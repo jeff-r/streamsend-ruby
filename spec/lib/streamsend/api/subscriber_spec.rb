@@ -56,7 +56,7 @@ module StreamSend
         end
       end
 
-      describe ".all" do
+      describe ".index" do
         describe "with subscribers" do
           before(:each) do
             xml = <<-XML
@@ -70,11 +70,11 @@ module StreamSend
             </people>
             XML
 
-            stub_http_request(:get, "http://#{@username}:#{@password}@#{@host}/audiences/2/people.xml").to_return(:body => xml)
+            stub_http_request(:get, "http://#{@username}:#{@password}@#{@host}/audiences/2/people.xml?").to_return(:body => xml)
           end
 
           it "should return array of one subscriber object" do
-            subscribers = StreamSend::Api::Subscriber.all
+            subscribers = StreamSend::Api::Subscriber.index
             subscribers.size.should == 1
 
             subscribers.first.should be_instance_of(StreamSend::Api::Subscriber)
@@ -91,11 +91,11 @@ module StreamSend
             <people type="array"/>
             XML
 
-            stub_http_request(:get, "http://#{@username}:#{@password}@#{@host}/audiences/2/people.xml").to_return(:body => xml)
+            stub_http_request(:get, "http://#{@username}:#{@password}@#{@host}/audiences/2/people.xml?").to_return(:body => xml)
           end
 
           it "should return an empty array" do
-            StreamSend::Api::Subscriber.all.should == []
+            StreamSend::Api::Subscriber.index.should == []
           end
         end
 
@@ -110,7 +110,9 @@ module StreamSend
           end
 
           it "should raise an exception" do
-            lambda { StreamSend::Api::Subscriber.all }.should raise_error
+            expect do
+              StreamSend::Api::Subscriber.index
+            end.to raise_error(ApiException)
           end
         end
       end
@@ -276,6 +278,32 @@ module StreamSend
           it "should raise exception" do
             lambda { StreamSend::Api::Subscriber.new({"id" => 99, "audience_id" => 1}).unsubscribe }.should raise_error
           end
+        end
+      end
+
+      describe "#destory" do
+        let( :subscriber ){
+          StreamSend::Api::Subscriber.new({"id"=> 2, "audience_id" => 1})
+        }
+        let( :uri ){ "http://#{@username}:#{@password}@#{@host}/audiences/1/people/2.xml" }
+
+        it "returns true when destroyed" do
+          stub_http_request(:delete, uri ).to_return(:body => nil)
+          expect(subscriber.destroy).to be_true
+        end
+
+        it "throws a LockedError when locked" do
+          stub_http_request(:delete, uri ).to_return(:status => 423, :body => nil)
+          expect do
+            subscriber.destroy
+          end.to raise_error( LockedError )
+        end
+
+        it "throws unexpected response with any other exception" do
+          stub_http_request(:delete, uri ).to_return(:status => 500, :body => "Error text meant for HCI")
+          expect do
+            subscriber.destroy
+          end.to raise_error( UnexpectedResponse )
         end
       end
     end
