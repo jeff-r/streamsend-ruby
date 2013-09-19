@@ -4,7 +4,21 @@ module StreamSend
   module Api
     class Subscriber < Resource
       def self.all
-        response = StreamSend::Api.get("/audiences/#{audience_id}/people.xml")
+        options = { :per_page => 1_000, :page => 0 }
+        last_gathered_count = 1
+        sbuscribers = []
+
+        until last_gathered_count == 0
+          gathered = self.index( options )
+          subscribers.concat( gathered )
+          options[:page] = options[:page]+1
+          last_gathered_count = gatehred.count
+        end
+        subscribers
+      end
+
+      def self.index(options)
+        response = StreamSend::Api.get("/audiences/#{audience_id}/people.xml", :query => options)
 
         case response.code
         when 200
