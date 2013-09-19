@@ -17,11 +17,12 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "vcr"
   gem.add_development_dependency "watchr"
   gem.add_development_dependency "ruby-fsevent"
+  gem.add_development_dependency "pair-salad"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "streamsend"
   gem.require_paths = ["lib"]
-  gem.version       = "0.2.1"
+  gem.version       = "0.2.2"
 end
