@@ -18,6 +18,7 @@ module StreamSend
           StreamSend::Api::Resource.new({"id" => 99}).id.should == 99
         end
       end
+
     end
   end
 end

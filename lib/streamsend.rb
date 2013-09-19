@@ -16,6 +16,7 @@ module StreamSend
     def self.configure(username, password, host = "app.streamsend.com")
       base_uri host
       basic_auth username, password
+      StreamSend::Api::Subscriber.clear_audience
     end
   end
 end

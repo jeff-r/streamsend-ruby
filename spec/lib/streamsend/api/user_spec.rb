@@ -1,4 +1,5 @@
 require File.join(File.dirname(__FILE__), "../../../spec_helper")
+require "webmock"
 require "active_support/core_ext/hash"
 
 module StreamSend
