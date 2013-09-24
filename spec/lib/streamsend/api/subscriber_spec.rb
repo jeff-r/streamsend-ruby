@@ -281,7 +281,7 @@ module StreamSend
         end
       end
 
-      describe "#destory" do
+      describe "#destroy" do
         let( :subscriber ){
           StreamSend::Api::Subscriber.new({"id"=> 2, "audience_id" => 1})
         }
