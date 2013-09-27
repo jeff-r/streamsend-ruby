@@ -175,28 +175,62 @@ module StreamSend
             end
           end
 
-          describe "with an existing subscriber using the given email address" do
+          describe "when receiving a semantic error" do
+            describe "with a single error" do
+              let( :error1 ){ "Email address has already been taken" }
+
+              before(:each) do
+                response_body = <<-XML
+<errors>
+  <error>#{error1}</error>
+</errors>
+                XML
+                stub_http_request(:post, /audiences\/2\/people.xml/).with(:person => {"email_address" => "foo@bar.com", "first_name" => "JoeBob"}).to_return(:status => 422, :body => response_body )
+              end
+
+              it "should raise an exception" do
+                expect do
+                  subscriber_id = StreamSend::Api::Subscriber.create({"email_address" => "foo@bar.com", "first_name" => "JoeBob"})
+                end.to raise_error( StreamSend::Api::SemanticException )
+              end
+
+              it "should pass on the errors" do
+                captured_problem = nil
+                begin
+                  subscriber_id = StreamSend::Api::Subscriber.create({"email_address" => "foo@bar.com", "first_name" => "JoeBob"})
+                rescue StreamSend::Api::SemanticException => problem
+                  captured_problem = problem
+                end
+                expect(captured_problem.errors.count).to be(1)
+                expect(captured_problem.errors).to include(error1)
+              end
+            end
+          end
+
+          describe "with multiple errors" do
+            let( :error1 ){ "bonjour" }
+            let( :error2 ){ "some other string you are unlikely to copy and paste" }
+
             before(:each) do
-              stub_http_request(:post, /audiences\/2\/people.xml/).with(:person => {"email_address" => "foo@bar.com", "first_name" => "JoeBob"}).to_return(:body => "<error>Email address has already been taken<error>")
+              response_body = <<-XML
+<errors>
+  <error>#{error1}</error>
+  <error>#{error2}</error>
+</errors>
+XML
+              stub_http_request(:post, /audiences\/2\/people.xml/).with(:person => {"email_address" => "foo@bar.com", "first_name" => "JoeBob"}).to_return(:status => 422, :body => response_body )
             end
 
-            it "should raise an exception" do
-              lambda {
+            it "should pass on the errors" do
+              captured_problem = nil
+              begin
                 subscriber_id = StreamSend::Api::Subscriber.create({"email_address" => "foo@bar.com", "first_name" => "JoeBob"})
-              }.should raise_error
+              rescue StreamSend::Api::SemanticException => problem
+                captured_problem = problem
+              end
+              expect(captured_problem.errors.count).to eq( 2 )
+              expect(captured_problem.errors).to include(error1, error2)
             end
-          end
-        end
-
-        describe "with invalid subscriber parameters" do
-          before(:each) do
-            stub_http_request(:post, /audiences\/2\/people.xml/).with({"email_address" => "foo.com", "first_name" => "JoeBob"}).to_return(:body => "<error>Email address does not appear to be valid</error>")
-          end
-
-          it "should raise an exception" do
-            lambda {
-              subscriber_id = StreamSend::Api::Subscriber.create({"email_address" => "foo@bar.com", "first_name" => "JoeBob"})
-            }.should raise_error
           end
         end
       end
