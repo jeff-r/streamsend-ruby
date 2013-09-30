@@ -14,6 +14,10 @@ module StreamSend
       def errors
         @errors
       end
+
+      def to_s
+        "#{self.class.name}: #{errors.join(',')}"
+      end
     end
 
     class LockedError <  ApiException
