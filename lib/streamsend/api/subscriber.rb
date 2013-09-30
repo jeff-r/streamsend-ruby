@@ -53,6 +53,8 @@ module StreamSend
           unless subscriber_id.nil?
             subscriber_id.to_i
           end
+        when 422
+          raise StreamSend::Api::SemanticException.new(response["errors"]["error"])
         else
           raise StreamSend::Api::Exception.new("Could not create the subscriber. (#{response.code})")
         end
